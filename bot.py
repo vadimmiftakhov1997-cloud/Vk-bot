@@ -6,7 +6,42 @@ from datetime import datetime, timedelta
 import vk_api
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 from vk_api.utils import get_random_id
+# ── Создание папок и файлов при первом запуске ─────────────────────────────
 
+# Список всех файлов, которые нужны боту
+FILES_TO_CREATE = [
+    "bot/roles.json",
+    "bot/stats.json",
+    "bot/warns.json",
+    "bot/rules.txt",
+    "bot/events.json",
+    "bot/riddles.json",
+    "bot/crocodile_words.json",
+    "bot/garden.json",
+]
+
+# Создаём папку bot, если её нет
+if not os.path.exists("bot"):
+    os.makedirs("bot")
+    print("📁 Папка 'bot' создана", flush=True)
+
+# Создаём каждый файл, если его нет
+for file_path in FILES_TO_CREATE:
+    if not os.path.exists(file_path):
+        # Определяем содержимое по умолчанию
+        if file_path.endswith(".json"):
+            if "roles" in file_path or "warns" in file_path or "garden" in file_path or "stats" in file_path:
+                default_content = "{}"
+            elif "events" in file_path or "riddles" in file_path or "crocodile" in file_path:
+                default_content = "[]"
+            else:
+                default_content = "{}"
+        else:  # .txt файлы
+            default_content = ""
+        
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.write(default_content)
+        print(f"📄 Файл '{file_path}' создан", flush=True)
 TOKEN = os.environ["VK_TOKEN"]
 GROUP_ID = int(os.environ["VK_GROUP_ID"])
 
