@@ -1,0 +1,4 @@
+```txt
+vk-api
+requests
+```
